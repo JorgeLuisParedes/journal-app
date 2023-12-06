@@ -25,7 +25,7 @@ export const NavBar = ({ drawerWidth = 240 }) => {
 					alignItems='center'
 				>
 					<Typography variant='h6' noWrap component='div'>
-						JuornalApp
+						JournalApp
 					</Typography>
 					<IconButton color='error'>
 						<LogoutOutlined />
