@@ -37,5 +37,6 @@ module.exports = {
 		'react/prop-types': 'warn',
 		camelcase: 'warn',
 		'no-undef': 'off',
+		'import/export': 0,
 	},
 };
