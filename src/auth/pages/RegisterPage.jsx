@@ -30,7 +30,7 @@ export const RegisterPage = () => {
 		emailValid,
 		passwordValid,
 	} = useForm(formData, formValidations);
-
+	console.log(displayNameValid);
 	const onSubmit = event => {
 		event.preventDefault();
 		console.log(formState);
@@ -46,7 +46,7 @@ export const RegisterPage = () => {
 							type='text'
 							placeholder='Nombre completo'
 							fullWidth
-							name='displaName'
+							name='displayName'
 							value={displayName}
 							onChange={onInputChange}
 							error={!displayNameValid}
