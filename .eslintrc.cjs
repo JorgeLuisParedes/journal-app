@@ -38,5 +38,6 @@ module.exports = {
 		camelcase: 'warn',
 		'no-undef': 'off',
 		'import/export': 0,
+		'no-extra-boolean-cast': off,
 	},
 };
