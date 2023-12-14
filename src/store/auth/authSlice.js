@@ -23,7 +23,7 @@ export const authSlice = createSlice({
 			state.status = 'not-authenticated'; // 'checking', 'not-authenticated', 'authenticated'
 			state.uid = null;
 			state.email = null;
-			dispstate.displayName = null;
+			state.displayName = null;
 			state.photoURL = null;
 			state.errorMessage = payload.errorMessage;
 		},
