@@ -17,10 +17,8 @@ export const startNewNote = () => {
 		const setDocResp = await setDoc(newDoc, newNote);
 		newNote.id = newDoc.id;
 
-		//! dispatch
 		dispatch(addNewEmptyNote(newNote));
 		dispatch(setActiveNote(newNote));
-		//  dispatch(activarNote)
 	};
 };
 
