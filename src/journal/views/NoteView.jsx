@@ -4,7 +4,11 @@ import { ImageGallery } from '../components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from '../../hooks';
 import { useEffect, useMemo, useRef } from 'react';
-import { setActiveNote, startSaveNote } from '../../store/journal';
+import {
+	setActiveNote,
+	startSaveNote,
+	startUploadingFiles,
+} from '../../store/journal';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
 
@@ -40,7 +44,7 @@ export const NoteView = () => {
 
 	const onFileInputChange = ({ target }) => {
 		if (target.files === 0) return;
-		console.log('subiendo archivos');
+		dispatch(startUploadingFiles(target.files));
 	};
 
 	return (
