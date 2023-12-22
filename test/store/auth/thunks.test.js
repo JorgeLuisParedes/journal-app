@@ -1,6 +1,7 @@
 import {
 	loginWithEmailPassword,
 	logoutFirebase,
+	registerUserWithEmailPassword,
 	signInWithGoogle,
 } from '../../../src/firebase/providers';
 import {
@@ -11,6 +12,7 @@ import {
 } from '../../../src/store/auth';
 import {
 	checkingAuthentication,
+	startCreatingUserWithEmailPassword,
 	startLoginWithEmailPassword,
 	startLogout,
 } from '../../../src/store/auth/thunks';
@@ -66,6 +68,36 @@ describe('Pruebas en AuthThunks', () => {
 
 		expect(dispatch).toHaveBeenCalledWith(checkingCredentials());
 		expect(dispatch).toHaveBeenCalledWith(logout(loginData));
+	});
+
+	test('startCreatingUserWithEmailPassword debe de llamar el checkingCredentials y login - Exito', async () => {
+		const loginData = { ok: true, ...demoUser };
+		const formData = {
+			displayName: demoUser.displayName,
+			email: demoUser.email,
+			password: '123456',
+		};
+
+		await registerUserWithEmailPassword.mockResolvedValue(loginData);
+		await startCreatingUserWithEmailPassword(formData)(dispatch);
+
+		expect(dispatch).toHaveBeenCalledWith(checkingCredentials());
+		expect(dispatch).toHaveBeenCalledWith(login(loginData));
+	});
+
+	test('startCreatingUserWithEmailPassword debe de llamar el checkingCredentials y login - Error', async () => {
+		const loginData = { ok: false, errorMessage: 'Un error en el registro' };
+		const formData = {
+			displayName: demoUser.displayName,
+			email: demoUser.email,
+			password: '123456',
+		};
+
+		await registerUserWithEmailPassword.mockResolvedValue(loginData);
+		await startCreatingUserWithEmailPassword(formData)(dispatch);
+
+		expect(dispatch).toHaveBeenCalledWith(checkingCredentials());
+		expect(dispatch).toHaveBeenCalledWith(logout(loginData.errorMessage));
 	});
 
 	test('startLogout debe de llamar logoutFirebase, clearNotesLogout, logout', async () => {
