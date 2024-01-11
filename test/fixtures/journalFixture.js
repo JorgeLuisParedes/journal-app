@@ -5,41 +5,48 @@ export const initialState = {
 	active: null,
 };
 
-export const withNoteState = {
-	isSaving: false,
-	messageSaved: '',
-	notes: [
-		{
-			id: 'NOTE123',
-			date: 1704909327123,
-			title: 'Nota de prueba',
-			body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
-		},
-		{
-			id: 'NOTE124',
-			date: 1704909327124,
-			title: 'Nota de prueba 2',
-			body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
-		},
-	],
-	active: {
-		id: 'NOTE123',
-		date: 1704909327123,
-		title: 'Nota de prueba',
-		body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
-	},
-};
-
-export const noteState = {
-	id: 'NOTE123',
-	date: 1704909327123,
-	title: 'Nota de prueba',
-	body: 'Lorem ipsum, dolor sit amet consectetur adipisicing elit.',
-};
-
-export const emptyNoteState = {
-	id: 'NOTE123',
-	date: 1704909327123,
+export const newNote = {
+	id: 'ABC123',
 	title: '',
 	body: '',
+	date: new Date().getTime(),
+	imageUrls: [],
 };
+
+export const arrayNotes = [
+	{
+		id: '1',
+		title: 'Nota 1',
+		body: 'Desc',
+		date: new Date().getTime(),
+		imageUrls: [],
+	},
+	{
+		id: '2',
+		title: 'Nota 1',
+		body: 'Desc',
+		date: new Date().getTime(),
+		imageUrls: [],
+	},
+	{
+		id: '3',
+		title: 'Nota 1',
+		body: 'Desc',
+		date: new Date().getTime(),
+		imageUrls: [],
+	},
+];
+
+export const payloadUpdateNote = {
+	id: '1',
+	title: 'Titulo nota',
+	body: 'Descripción nota',
+	date: new Date().getTime(),
+	imageUrls: [],
+};
+
+export const arrayImageUrl = [
+	'http://demo1.jpg',
+	'http://demo2.jpg',
+	'http://demo3.jpg',
+];

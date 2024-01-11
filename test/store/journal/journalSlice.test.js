@@ -10,41 +10,25 @@ import {
 	setSaving,
 	updateNote,
 } from '../../../src/store/journal/journalSlice';
+
 import {
-	emptyNoteState,
+	arrayImageUrl,
+	arrayNotes,
 	initialState,
-	noteState,
-	withNoteState,
+	newNote,
+	payloadUpdateNote,
 } from '../../fixtures/journalFixture';
 
-describe('Pruebas en el journalSlice', () => {
-	test('Debe de llamar el estado inicial y llamarse journal', () => {
+describe('Pruebas en journalSlice', () => {
+	test('Debe de regresar el estado incial y llamarse journal', () => {
 		const state = journalSlice.reducer(initialState, {});
-
 		expect(journalSlice.name).toBe('journal');
 		expect(state).toEqual(initialState);
 	});
 
-	test('Debe de poder cargar las notas', () => {
-		const state = journalSlice.reducer(initialState, setNotes([noteState]));
-		expect(state).toEqual({
-			isSaving: false,
-			messageSaved: '',
-			notes: [
-				{
-					id: noteState.id,
-					date: noteState.date,
-					title: noteState.title,
-					body: noteState.body,
-				},
-			],
-			active: null,
-		});
-	});
-
-	test('Debe de guardar una nueva nota', () => {
-		const isSaving = true;
-		const state = journalSlice.reducer(initialState, savingNewNote(isSaving));
+	test('Debe de cambiar el estado isSaving a verdadero', () => {
+		const state = journalSlice.reducer(initialState, savingNewNote());
+		expect(state.isSaving).toBeTruthy();
 		expect(state).toEqual({
 			isSaving: true,
 			messageSaved: '',
@@ -53,86 +37,64 @@ describe('Pruebas en el journalSlice', () => {
 		});
 	});
 
-	test('Debe de agregar una nueva nota vacia', () => {
-		const state = journalSlice.reducer(
-			initialState,
-			addNewEmptyNote(emptyNoteState),
-		);
-		expect(state).toEqual({
-			isSaving: false,
-			messageSaved: '',
-			notes: [
-				{
-					id: emptyNoteState.id,
-					date: emptyNoteState.date,
-					title: emptyNoteState.title,
-					body: emptyNoteState.body,
-				},
-			],
-			active: null,
-		});
+	test('Debe de agregar la nota que llega por el payload al "notes"', () => {
+		const state = journalSlice.reducer(initialState, addNewEmptyNote(newNote));
+		expect(state.notes.length).toBe(1);
+		expect(state.notes).toContain(newNote);
 	});
 
-	test('Debe de seleccionar una nota activa', () => {
-		const state = journalSlice.reducer(
-			initialState,
-			setActiveNote(emptyNoteState),
-		);
-		expect(state).toEqual({
-			isSaving: false,
-			messageSaved: '',
-			notes: [],
-			active: {
-				id: emptyNoteState.id,
-				date: emptyNoteState.date,
-				title: emptyNoteState.title,
-				body: emptyNoteState.body,
-			},
-		});
+	test('Debe de establecer la nota activa y el messageSaved como un string vacío', () => {
+		const state = journalSlice.reducer(initialState, setActiveNote(newNote));
+		expect(state.active).toEqual(newNote);
+		expect(state.messageSaved).toBe('');
 	});
 
-	test('Debe de activar una nueva nota', () => {
+	test('Debe de establecer un arreglo de notas en las "notes"', () => {
+		const state = journalSlice.reducer(initialState, setNotes(arrayNotes));
+		expect(state.notes).toEqual(arrayNotes);
+		expect(state.notes.length).toBe(arrayNotes.length);
+	});
+
+	test('Debe de establecer el isSaving verdadero y el messageSaved como un string vacío ', () => {
 		const state = journalSlice.reducer(initialState, setSaving());
-		expect(state).toEqual({
-			isSaving: true,
-			messageSaved: '',
-			notes: [],
-			active: null,
-		});
+		expect(state.isSaving).toBeTruthy();
+		expect(state.messageSaved).toBe('');
 	});
 
-	test('Debe de actualizar una nota', () => {
-		const state = journalSlice.reducer(initialState, updateNote(noteState));
-		const messageSaved = `${noteState.title}, actualizada correctamente`;
-		expect(state).toEqual({
-			isSaving: false,
-			messageSaved,
-			notes: [],
-			active: null,
-		});
-	});
-
-	// ! Este test no funciona
-	test('Debe agregar imagenes a la nota', () => {
-		const imageUrl = 'http://demo.jpg';
-		const state = journalSlice.reducer(
-			initialState,
-			setPhotosToActiveNote(imageUrl),
+	test('Debe de actualizar la nota enviando el id por el payload y tener un messageSaved', () => {
+		const state = journalSlice.reducer(initialState, setNotes(arrayNotes));
+		const stateToUpdate = journalSlice.reducer(
+			state,
+			updateNote(payloadUpdateNote),
+		);
+		expect(
+			stateToUpdate.notes.find(note => note.id === payloadUpdateNote.id),
+		).toEqual(payloadUpdateNote);
+		expect(stateToUpdate.messageSaved).toBe(
+			`${payloadUpdateNote.title}, actualizada correctamente`,
 		);
 	});
 
-	test('Debe de limpiar las notas', () => {
+	test('Debe de establecer un arreglo de imagenes en el imageUrl de la nota activa', () => {
+		const state = journalSlice.reducer(initialState, setActiveNote(newNote));
+		const stateWithActiveNote = journalSlice.reducer(
+			state,
+			setPhotosToActiveNote(arrayImageUrl),
+		);
+		expect(stateWithActiveNote.active.imageUrls).toEqual(arrayImageUrl);
+		expect(stateWithActiveNote.isSaving).toBeFalsy();
+	});
+
+	test('Debe de establecer el estado inicial al hacer el clearNotesLogout', () => {
 		const state = journalSlice.reducer(initialState, clearNotesLogout());
 		expect(state).toEqual(initialState);
 	});
 
-	// ! Este test funciona pero pienso que no está correcto
-	test('debe de eliminar una nota', () => {
-		const noteId = 'NOTE123';
-		const state = journalSlice.reducer(withNoteState, deleteNoteById(noteId));
-		expect(state.active).toBe(null);
-
-		const searchDeleteNote = state.notes.find(notes => notes.id === noteId);
-		expect(searchDeleteNote).toBeUndefined();
+	test('Debe de eliminar una nota por el id del arreglo de "notes" y el active en null', () => {
+		const state = journalSlice.reducer(initialState, setNotes(arrayNotes));
+		const statusWithoutNote = journalSlice.reducer(state, deleteNoteById('1'));
+		expect(statusWithoutNote.active).toBe(null);
+		expect(statusWithoutNote.notes.length).toBe(2);
+		expect(statusWithoutNote.notes).not.toContain(arrayNotes[0]);
 	});
 });
