@@ -35,6 +35,7 @@ export const LoginPage = () => {
 	};
 
 	const onGoogleSignIn = () => {
+		// console.log('onGoogleSignIn');
 		dispatch(startGoogleSignIn());
 	};
 	return (
@@ -88,6 +89,7 @@ export const LoginPage = () => {
 							<Button
 								variant='contained'
 								fullWidth
+								aria-label='google-btn'
 								onClick={onGoogleSignIn}
 								disabled={isAutheticating}
 							>
