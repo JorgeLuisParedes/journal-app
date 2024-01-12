@@ -31,6 +31,7 @@ export const LoginPage = () => {
 
 	const onSubmit = event => {
 		event.preventDefault();
+		console.log({ email, password });
 		dispatch(startLoginWithEmailPassword(formState));
 	};
 
@@ -40,7 +41,7 @@ export const LoginPage = () => {
 	};
 	return (
 		<AuthLayout title='Login'>
-			<form
+			<form aria-label='submit-form'
 				onSubmit={onSubmit}
 				className='animate__animated animate__fadeIn animate__faster'
 			>
@@ -63,6 +64,9 @@ export const LoginPage = () => {
 							placeholder='Contraseña'
 							fullWidth
 							name='password'
+							inputProps={{
+								'data-testid': 'password',
+							}}
 							value={password}
 							onChange={onInputChange}
 						/>

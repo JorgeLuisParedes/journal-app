@@ -49,4 +49,27 @@ describe('Pruebas en <LoginPage />', () => {
 
 		expect(mockStartGoogleSignIn).toHaveBeenCalled();
 	});
+
+	test('El submit debe de llamar startLoginWithEmailPassword', () => {
+		const email = 'jorgeparedes@google.com';
+		const password = 'password123456';
+		render(
+			<Provider store={store}>
+				<MemoryRouter>
+					<LoginPage />
+				</MemoryRouter>
+			</Provider>,
+		);
+
+		const emailField = screen.getByRole('textbox', { name: 'Correo' });
+		fireEvent.change(emailField, { target: { name: 'email', value: email } });
+
+		const passwordField = screen.getByTestId('password');
+		fireEvent.change(passwordField, {
+			target: { name: 'password', value: password },
+		});
+
+		const loginForm = screen.getByLabelText('submit-form');
+		fireEvent.submit(loginForm);
+	});
 });
