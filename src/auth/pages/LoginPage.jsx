@@ -31,7 +31,7 @@ export const LoginPage = () => {
 
 	const onSubmit = event => {
 		event.preventDefault();
-		console.log({ email, password });
+		// console.log({ email, password });
 		dispatch(startLoginWithEmailPassword(formState));
 	};
 
@@ -41,7 +41,8 @@ export const LoginPage = () => {
 	};
 	return (
 		<AuthLayout title='Login'>
-			<form aria-label='submit-form'
+			<form
+				aria-label='submit-form'
 				onSubmit={onSubmit}
 				className='animate__animated animate__fadeIn animate__faster'
 			>
